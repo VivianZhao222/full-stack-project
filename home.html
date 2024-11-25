@@ -7,12 +7,18 @@
 Find Single Item:
 	<input type="text" name = "ItemID" placeholder="ItemID" required/> </br>
     <input type="submit" value = Find />
+	{% if error2 %}
+	<p class="error"><strong>Error:</strong> {{error2}}</p>
+{% endif %}
 </form>
 
 <form action="/findorderItem" method="Get">
 Find Order Items:
 	<input type="text" name = "orderID" placeholder="orderID" required/> </br>
     <input type="submit" value = Find />
+	{% if error3 %}
+	<p class="error"><strong>Error:</strong> {{error3}}</p>
+{% endif %}
 </form>
 
 
