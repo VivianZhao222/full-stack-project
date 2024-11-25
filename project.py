@@ -517,7 +517,7 @@ def upload_file():
 
 @app.route('/logout')
 def logout():
-    session.pop('username')
+    session.pop('username', None)
     session.pop('orderID', None)
     session.pop('mainCategory', None)
     session.pop('subCategory', None)
