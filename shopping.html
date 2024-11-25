@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Shopping</title>
+</head>
+<body>
+
+<h3>Add to current order: {{ orderID }}</h3>
+
+<h4>Main Category: {{ main_category }}</h4>
+<h4>Sub Category: {{ sub_category }}</h4>
+<!-- Form to add items to the order -->
+<form action="/shopping" method="POST">
+    <h4>Select Items to Add to the Order</h4>
+    {% if items %}
+        <!-- Iterate over the available items and display them with checkboxes -->
+        {% for item in items %}
+            <label>
+                <input type="checkbox" name="items" value="{{ item.ItemID }}">
+                (ItemID: {{ item.ItemID }}) {{ item.iDescription }}
+            </label><br>
+        {% endfor %}
+    {% else %}
+        <p>No items available in this category/subcategory.</p>
+    {% endif %}
+
+    <br>
+    <input type="submit" value="Select">
+	{% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+</form>
+
+<!-- Back and Logout buttons -->
+<br><br>
+<a href="/startOrder?client={{ client }}">Back</a><br><br>
+<a href="/logout">Logout</a>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<html>
+<head>
+</head>
+<body>
+    <h1>Accept Donation from {{ Donor }}</h1>
+    <form action="/enterItem" method="POST">
+        Enter Item:<br/>
+        <input type="hidden" name="donor_id" value="{{ Donor }}" />
+        <input type="text" name="mainCategory" placeholder="*Main Category" required /><br/>
+        <input type="text" name="subCategory" placeholder="*Sub-category" required /><br/>
+        <input type="text" name="iDescription" placeholder="Item Description" /><br/>
+        photo<input type="file" name="photo" placeholder="photo"  /><br/>
+        <input type="text" name="color" placeholder="color" /><br/>
+        <input type="number" name="isNew" placeholder="isNew" /><br/>
+        <input type="number" name="hasPieces" placeholder="hasPieces" /><br/>
+        <input type="text" name="material" placeholder="material" /><br/>
+        <input type="submit" value="Enter Item" />
+        {% if success %}
+        <p class="success" style="color: green;"><strong>Success:</strong> {{ success }}</p>
+        {% elif error %}
+        <p class="error" style="color: red;"><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
+    </form>
+
+Current ItemID = {{ itemID }}
+    <form action="/enterPiece" method="POST">
+        Enter Piece:<br/>
+
+        <input type="hidden" name="itemID" value="{{ itemID }}" />
+        <input type="number" name="pieceNum" placeholder="*pieceNum" required /><br/>
+        <input type="text" name="pDescription" placeholder="Piece Description" /><br/>
+        <input type="number" name="length" placeholder="length" /><br/>
+        <input type="number" name="width" placeholder="width" /><br/>
+        <input type="number" name="height" placeholder="height"  /><br/>
+        <input type="number" name="roomNum" placeholder="*Room Number" /><br/>
+        <input type="number" name="shelfNum" placeholder="*Shelf Number" /><br/>
+        <input type="text" name="pNotes" placeholder="Piece Notes" /><br/>
+        <input type="submit" value="Enter Piece" />
+        {% if success1 %}
+        <p class="success" style="color: green;"><strong>Success:</strong> {{ success1 }}</p>
+        {% elif error1 %}
+        <p class="error" style="color: red;"><strong>Error:</strong> {{ error1 }}</p>
+    {% endif %}
+    </form>
+    <a href="/home">Back</a>
+</body>
+</html>
+
