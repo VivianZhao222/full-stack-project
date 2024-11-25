@@ -166,26 +166,38 @@ def home():
     session.pop('orderID', None)
     session.pop('mainCategory', None)
     session.pop('subCategory', None)
+    session.pop('client', None)
     return render_template('home.html', username=user)
 
 @app.route('/findsingleItem', methods=["GET", "POST"])
 def findsingleItem():
+    user = session['username']
     ItemID = request.args['ItemID']
     cursor = conn.cursor();
     query = 'SELECT Item.mainCategory, Item.subCategory, Item.iDescription AS itemDescription, Piece.pieceNum, Piece.roomNum, Piece.shelfNum, Piece.pNotes, Piece.pDescription AS pieceDescription, Piece.length, Piece.width, Piece.height FROM Piece NATURAL JOIN Item WHERE Piece.ItemID = %s;'
     cursor.execute(query, ItemID)
     data = cursor.fetchall()
     cursor.close()
-    return render_template('findsingleItem.html', itemID=ItemID, locations=data)
+    if data:
+        return render_template('findsingleItem.html', itemID=ItemID, locations=data)
+    else:
+        error = f"Item '{ItemID}' does not exist."
+        return render_template('home.html', username=user, error2=error)
+        
+
 
 @app.route('/findorderItem', methods=["GET", "POST"])
 def findorderItem():
+    user = session['username']
     orderID = request.args['orderID']
     cursor = conn.cursor();
     query = 'SELECT Item.ItemID, Item.mainCategory, Item.subCategory, Item.iDescription AS itemDescription, Piece.pieceNum, Piece.pDescription AS pieceDescription, Piece.length, Piece.width, Piece.height, Piece.roomNum, Piece.shelfNum, Piece.pNotes FROM Piece NATURAL JOIN Item NATURAL JOIN ItemIn WHERE ItemIn.orderID = %s ORDER BY ItemID,pieceNum;'
     cursor.execute(query, orderID)
     data = cursor.fetchall()
     cursor.close()
+    if not data:
+        error = f"Order '{orderID}' does not exist."
+        return render_template('home.html', username=user, error3=error)
     return render_template('findorderItem.html', OrderID=orderID, location=data)
 
 
@@ -229,7 +241,6 @@ def acceptDonation():
 @app.route('/enterItem', methods=['GET', 'POST'])
 def enterItem():
     if request.method == 'POST':
-        # Grab information from the form
         donor_id = request.form['donor_id']
         if not donor_id:
             return redirect(url_for('acceptDonation'))
@@ -271,12 +282,10 @@ def enterItem():
             cursor.execute(insert_donated_by_query, (itemID, donor_id))
             conn.commit()
 
-            # Success message
             success_message = "Item successfully donated!"
             return render_template('acceptDonation.html', Donor=donor_id, itemID=itemID, success=success_message)
 
         except Exception as e:
-            # Rollback in case of error and capture the error message
             conn.rollback()
             error_message = f"Failed to donate the item. Error: {str(e)}"
             return render_template('acceptDonation.html', Donor=donor_id, error=error_message)
@@ -287,7 +296,6 @@ def enterItem():
 @app.route('/enterPiece', methods=['GET', 'POST'])
 def enterPiece():
     if request.method == 'POST':
-        # Grab information from the form using request.form[]
         itemID = request.form['itemID']
         pieceNum = request.form['pieceNum']
         pDescription = request.form['pDescription']
@@ -362,16 +370,13 @@ def start_order():
             error = 'Only Staff Member could start an order.'
             return render_template('home.html', username=user, error1=error)
 
-        # Get the client from the request
         client = request.args.get('client')
         if client:
             session['client'] = client
-        # Check if the client exists with roleID = 4 (Client)
         cursor = conn.cursor()
         query = "SELECT username FROM Act WHERE username = %s AND roleID = 4"
         cursor.execute(query, (client,))
         client_result = cursor.fetchone()
-
         if not client_result:
             error = f"Client '{client}' does not exist."
             return render_template('home.html', username=user, error1=error)
@@ -407,7 +412,6 @@ def get_subcategories():
     main_category = request.args.get('mainCategory')
     cursor = conn.cursor()
     try:
-        # Query subcategories based on the selected main category
         query = "SELECT DISTINCT subCategory FROM Item WHERE mainCategory = %s"
         cursor.execute(query, (main_category,))
         sub_categories = [row['subCategory'] for row in cursor.fetchall()]
@@ -435,7 +439,6 @@ def shopping():
         main_category = session.get('mainCategory')
         sub_category = session.get('subCategory')
 
-        # If no mainCategory or subCategory in session, get from request args
         if not main_category or not sub_category:
             main_category = request.args.get('mainCategory')
             sub_category = request.args.get('subCategory')
@@ -445,7 +448,7 @@ def shopping():
                 session['subCategory'] = sub_category
         client = session.get('client')  
         if not client:
-            return redirect('/home')  # Redirect if no client session
+            return redirect('/home')  
 
         query = """
             SELECT ItemID, iDescription 
@@ -518,6 +521,7 @@ def logout():
     session.pop('orderID', None)
     session.pop('mainCategory', None)
     session.pop('subCategory', None)
+    session.pop('client', None)
     return redirect('/')
         
 app.secret_key = 'some key that you will never guess'
