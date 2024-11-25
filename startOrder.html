@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Start Order</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Dynamically fetch and update subcategories based on main category selection
+        $(document).ready(function() {
+            $('#mainCategory').change(function() {
+                var mainCategory = $(this).val();
+                if (mainCategory) {
+                    $.ajax({
+                        url: '/getSubCategories',
+                        type: 'GET',
+                        data: { mainCategory: mainCategory },
+                        success: function(response) {
+                            $('#subCategory').html(response);
+                        }
+                    });
+                } else {
+                    $('#subCategory').html('<option value="">Select Sub-category</option>');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<h3>Add to current order: {{ orderID }}</h3>
+
+<form action="/shopping" method="GET">
+    <!-- Main Category Dropdown -->
+    <label for="mainCategory">Select Main Category:</label>
+    <select name="mainCategory" id="mainCategory" required>
+        <option value="">--Select--</option>
+        {% for category in main_categories %}
+            <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Sub Category Dropdown (populated dynamically) -->
+    <label for="subCategory">Select Sub-category:</label>
+    <select name="subCategory" id="subCategory" required>
+        <option value="">Select Sub-category</option>
+    </select>
+    <br><br>
+
+    <input type="submit" value="Shopping" />
+</form>
+
+<br>
+<a href="/home">Back</a>
+<br>
+<a href="/logout">Logout</a>
+
+</body>
+</html>

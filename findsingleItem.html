@@ -1,0 +1,54 @@
+<html>
+<head>
+</head>
+<body>
+
+<style type="text/css">
+		table, th, td{
+			border: 1px solid black;
+		}
+</style>
+	
+Here are the locations of all pieces of item{{itemID}}:
+	
+<table>
+	<th> </th>
+	<th>Main category</th>
+	<th>Sub-category</th>
+	<th>Description</th>
+	<th>Piece</th>
+	<th>length</th>
+	<th>width</th>
+	<th>height</th>
+	<th>Room</th>
+	<th>Shelf</th>
+	<th>Notes</th>
+	
+{% for line in locations %}
+	<tr>
+		<td>{{line.pieceNum}}</td>
+		<td>{{line.mainCategory}}</td>
+		<td>{{line.subCategory}}</td>
+		<td>{{line.itemDescription}}</td>
+		<td>{{line.pieceDescription}}</td>
+		<td>{{line.length}}</td>
+		<td>{{line.width}}</td>
+		<td>{{line.height}}</td>
+		<td>{{line.roomNum}}</td>
+		<td>{{line.shelfNum}}</td>
+		<td>{{line.pNotes}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<br>
+<br>
+<a href="/home">Back</a>
+<br>
+<br>
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>

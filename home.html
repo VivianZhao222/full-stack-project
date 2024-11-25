@@ -1,0 +1,42 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/findsingleItem" method="Get">
+	<h1>Welcome {{username}}</h1> 
+Find Single Item:
+	<input type="text" name = "ItemID" placeholder="ItemID" required/> </br>
+    <input type="submit" value = Find />
+</form>
+
+<form action="/findorderItem" method="Get">
+Find Order Items:
+	<input type="text" name = "orderID" placeholder="orderID" required/> </br>
+    <input type="submit" value = Find />
+</form>
+
+
+<form action="/acceptDonation" method="Get">
+Accept Donation:
+	<input type="text" name = "DonorID" placeholder="donor" required/> </br>
+	<input type="submit" value = Accept />
+	{% if error %}
+	<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+</form>
+
+<form action="/startOrder" method="Get">
+	Start an Order:
+		<input type="text" name = "client" placeholder="client" required/> </br>
+		<input type="submit" value = Check />
+		{% if error1 %}
+		<p class="error"><strong>Error:</strong> {{error1}}</p>
+	{% endif %}
+	</form>
+<br>
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>
