@@ -216,7 +216,7 @@ def acceptDonation():
     else:
         #returns an error message to the html page
         error = 'Only Staff Member could accept a donation'
-        return render_template('home.html', username=list(user1.values())[0], error=error)  
+        return render_template('home.html', username=user, error=error)  
 
 
     #cursor used to send queries
@@ -236,7 +236,7 @@ def acceptDonation():
     else:
         #returns an error message to the html page
         error = 'This person is not registered as a donor!'
-        return render_template('home.html', username=list(user1.values())[0], error=error)       
+        return render_template('home.html', username=user, error=error)       
 
 @app.route('/enterItem', methods=['GET', 'POST'])
 def enterItem():
