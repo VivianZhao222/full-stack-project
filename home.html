@@ -33,7 +33,8 @@ Accept Donation:
 
 <form action="/startOrder" method="Get">
 	Start an Order:
-		<input type="text" name = "client" placeholder="client" required/> </br>
+		<input type="text" name = "client" placeholder="client" required/>  
+		<input type="text" name = "orderNotes" placeholder="order notes"/> </br>
 		<input type="submit" value = Check />
 		{% if error1 %}
 		<p class="error"><strong>Error:</strong> {{error1}}</p>
