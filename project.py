@@ -371,6 +371,8 @@ def start_order():
             return render_template('home.html', username=user, error1=error)
 
         client = request.args.get('client')
+        orderNotes = request.args.get('orderNotes')
+        
         if client:
             session['client'] = client
         cursor = conn.cursor()
@@ -385,10 +387,10 @@ def start_order():
         orderID = session.get('orderID')  
         if not orderID:
             query = """
-            INSERT INTO Ordered (orderDate, supervisor, client)
-            VALUES (CURRENT_DATE, %s, %s)
+            INSERT INTO Ordered (orderDate, orderNotes, supervisor, client)
+            VALUES (CURRENT_DATE, %s, %s, %s)
         """
-            cursor.execute(query, (user, client))
+            cursor.execute(query, (orderNotes, user, client))
             conn.commit()
         # Fetch the newly generated orderID (auto-incremented)
             orderID = cursor.lastrowid
@@ -399,7 +401,7 @@ def start_order():
         main_categories = [row['mainCategory'] for row in cursor.fetchall()] 
 
   
-        return render_template('startOrder.html', orderID=orderID, main_categories=main_categories)
+        return render_template('startOrder.html', orderID=orderID, main_categories=main_categories, client = client)
 
     except Exception as e:
         return f"An error occurred: {e}", 500
