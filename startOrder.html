@@ -25,7 +25,13 @@
 </head>
 <body>
 
-<h3>Add to current order: {{ orderID }} for client {{ client  }}</h3>
+<h3>Add to current order: {{ orderID }} for client {{ client  }} </h3>
+<h4>Order Date: {{ orderDate }} </h4>
+
+<h4>Order Notes:{% if orderNotes %} {{ orderNotes }} {% endif %}</h4>
+
+<h4>Supervisor: {{ user }} </h4>
+
 
 <form action="/shopping" method="GET">
     <!-- Main Category Dropdown -->
